@@ -1,52 +1,52 @@
-UNDRS = {}
+LETSGETNAKED = {}
 -- Builder functions
-UNDRS.BuildMenuUndress = function(player, context, items)
+LETSGETNAKED.BuildMenuUndress = function(player, context, items)
 	local player = getSpecificPlayer(player)
 	if items[1]['items'] ~= nil then
 		local check_container = items[1]['items'][1]:getContainer() 
 		local check_clothing = items[1]['items'][1]:getCategory()
 		if  check_container == player:getInventory() and check_clothing == "Clothing" then
-			context:addOption(getText("ContextMenu_Undress"), player, UNDRS.Undress, nil)
+			context:addOption(getText("ContextMenu_Undress"), player, LETSGETNAKED.Undress, nil)
 		end
 	end
 end
 
-UNDRS.BuildMenuDress = function(player, context, items)	
+LETSGETNAKED.BuildMenuDress = function(player, context, items)	
 	local player = getSpecificPlayer(player)
 	if items[1]['items'] ~= nil then
 		local check = items[1]['items'][1]:getCategory() 
 		if check == "Clothing" then
 			local container = items[1]['items'][1]:getContainer() or nil
-			context:addOption(getText("ContextMenu_Dress"), player, UNDRS.Dress, container)
+			context:addOption(getText("ContextMenu_Dress"), player, LETSGETNAKED.Dress, container)
 		end
 	end
 end
 
-UNDRS.BuildMenuUndressToContainer = function(player, context, worldobjects)
+LETSGETNAKED.BuildMenuUndressToContainer = function(player, context, worldobjects)
 	if worldobjects[1]:getContainer() ~= nil then
 		local player = getSpecificPlayer(player)
 		local container_X = worldobjects[1]:getSquare():getX()
 		local container_Y = worldobjects[1]:getSquare():getY()
 		if math.abs(player:getX() - container_X) < 2 and math.abs(player:getY() - container_Y) then
-			context:addOption(getText("ContextMenu_UndressContainer"), player, UNDRS.Undress, worldobjects[1]:getContainer())
+			context:addOption(getText("ContextMenu_UndressContainer"), player, LETSGETNAKED.Undress, worldobjects[1]:getContainer())
 		end
 	end
 end
 
-UNDRS.BuildMenuDressFromContainer = function(player, context, worldobjects)
+LETSGETNAKED.BuildMenuDressFromContainer = function(player, context, worldobjects)
 	if worldobjects[1]:getContainer() ~= nil then
 		local player = getSpecificPlayer(player)
 		local container_X = worldobjects[1]:getSquare():getX()
 		local container_Y = worldobjects[1]:getSquare():getY()
 		if math.abs(player:getX() - container_X) < 2 and math.abs(player:getY() - container_Y) then
 			local container = worldobjects[1]:getContainer()
-			context:addOption(getText("ContextMenu_DressContainer"), player, UNDRS.Dress, container)
+			context:addOption(getText("ContextMenu_DressContainer"), player, LETSGETNAKED.Dress, container)
 		end
 	end
 end
 
 -- Action functions
-UNDRS.Undress = function(player, container)
+LETSGETNAKED.Undress = function(player, container)
 	local container = container
 	local inv = player:getInventory():getItemsFromCategory('Clothing')
 	if inv:size() == 0 then
@@ -65,7 +65,7 @@ UNDRS.Undress = function(player, container)
 	end
 end
 
-UNDRS.Dress = function(player, container)
+LETSGETNAKED.Dress = function(player, container)
 	local clothing = container:getItemsFromCategory('Clothing')
 	local player_inv = player:getInventory():getItemsFromCategory('Clothing')
 	local equipped_clothing = {}
@@ -95,15 +95,15 @@ end
 
 
 -- TODO: swap clothing with inventory
-UNDRS.SwapClothingWithContainer = function(player, items)
+LETSGETNAKED.SwapClothingWithContainer = function(player, items)
 end
 
 -- Init function
 local function func_Init()
-	Events.OnFillInventoryObjectContextMenu.Add(UNDRS.BuildMenuUndress)
-	Events.OnFillInventoryObjectContextMenu.Add(UNDRS.BuildMenuDress)
-	Events.OnFillWorldObjectContextMenu.Add(UNDRS.BuildMenuUndressToContainer)
-	Events.OnFillWorldObjectContextMenu.Add(UNDRS.BuildMenuDressFromContainer)
+	Events.OnFillInventoryObjectContextMenu.Add(LETSGETNAKED.BuildMenuUndress)
+	Events.OnFillInventoryObjectContextMenu.Add(LETSGETNAKED.BuildMenuDress)
+	Events.OnFillWorldObjectContextMenu.Add(LETSGETNAKED.BuildMenuUndressToContainer)
+	Events.OnFillWorldObjectContextMenu.Add(LETSGETNAKED.BuildMenuDressFromContainer)
 end
 
 Events.OnGameStart.Add(func_Init)
