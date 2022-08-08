@@ -46,6 +46,30 @@ LETSGETNAKED.BuildMenuDressFromContainer = function(player, context, worldobject
 	end
 end
 
+LETSGETNAKED.BuildMenuUndressToFloor = function(player, context, worldobjects)
+	if worldobjects[1]:getContainer() ~= nil then
+		local player = getSpecificPlayer(player)
+		local container_X = worldobjects[1]:getSquare():getX()
+		local container_Y = worldobjects[1]:getSquare():getY()
+		if math.abs(player:getX() - container_X) < 2 and math.abs(player:getY() - container_Y) then
+			local container = worldobjects[1]:getContainer()
+			context:addOption(getText("ContextMenu_UndressFloor"), player, LETSGETNAKED.Undress, container)
+		end
+	end
+end
+
+LETSGETNAKED.BuildMenuDressFromFloor = function(player, context, worldobjects)
+	if worldobjects[1]:getContainer() ~= nil then
+		local player = getSpecificPlayer(player)
+		local container_X = worldobjects[1]:getSquare():getX()
+		local container_Y = worldobjects[1]:getSquare():getY()
+		if math.abs(player:getX() - container_X) < 2 and math.abs(player:getY() - container_Y) then
+			local container = worldobjects[1]:getContainer()
+			context:addOption(getText("ContextMenu_DressFloor"), player, LETSGETNAKED.Dress, container)
+		end
+	end
+end
+
 -- Action functions
 LETSGETNAKED.Undress = function(player, container)
 	local container = container
@@ -105,6 +129,8 @@ local function func_Init()
 	Events.OnFillInventoryObjectContextMenu.Add(LETSGETNAKED.BuildMenuDress)
 	Events.OnFillWorldObjectContextMenu.Add(LETSGETNAKED.BuildMenuUndressToContainer)
 	Events.OnFillWorldObjectContextMenu.Add(LETSGETNAKED.BuildMenuDressFromContainer)
+	Events.OnFillWorldObjectContextMenu.Add(LETSGETNAKED.BuildMenuUndressToFloor)
+	Events.OnFillWorldObjectContextMenu.Add(LETSGETNAKED.BuildMenuDressFromFloor)
 end
 
 Events.OnGameStart.Add(func_Init)
