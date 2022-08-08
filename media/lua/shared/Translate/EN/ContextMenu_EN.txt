@@ -1,8 +1,7 @@
 ContextMenu_EN = {
-	ContextMenu_UndressContainer = "Undress to container",
+	ContextMenu_Container = "Container",
+	ContextMenu_Floor = "Floor",
+	ContextMenu_Inventory = "Inventory",
 	ContextMenu_Undress = "Undress",
-	ContextMenu_UndressFloor = "Undress to floor",
-	ContextMenu_Dress = "Dress",
-	ContextMenu_DressContainer = "Dress from container",
-	ContextMenu_DressFloor = "Dress from floor"
+	ContextMenu_Dress = "Dress"
 }

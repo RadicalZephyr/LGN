@@ -1,25 +1,41 @@
 LETSGETNAKED = {}
+
+-- Context Menu functions
+
+local addInventoryUndress = function(player, context, inventoryContainer)
+	if inventoryContainer ~= nil then
+		context:addOption(getText("ContextMenu_Inventory"), player, LETSGETNAKED.Undress, nil)
+	end
+end
+
+local addInventoryDress = function(player, context, inventoryContainer)
+	if inventoryContainer ~= nil then
+		local container = inventoryContainer:getContainer() or nil
+		context:addOption(getText("ContextMenu_Inventory"), player, LETSGETNAKED.Dress, container)
+	end
+end
+
+
 -- Builder functions
+
 LETSGETNAKED.BuildMenuUndress = function(player, context, items)
 	local player = getSpecificPlayer(player)
-	if items[1]['items'] ~= nil then
-		local check_container = items[1]['items'][1]:getContainer() 
-		local check_clothing = items[1]['items'][1]:getCategory()
-		if  check_container == player:getInventory() and check_clothing == "Clothing" then
-			context:addOption(getText("ContextMenu_Undress"), player, LETSGETNAKED.Undress, nil)
-		end
-	end
+
+	local undressOption = context:addOption(getText("ContextMenu_Undress"), player, nil)
+	local subMenu = ISContextMenu:getNew(context)
+	context:addSubMenu(undressOption, subMenu)
+
+	addInventoryUndress(player, subMenu, items[1]['items'])
 end
 
 LETSGETNAKED.BuildMenuDress = function(player, context, items)	
 	local player = getSpecificPlayer(player)
-	if items[1]['items'] ~= nil then
-		local check = items[1]['items'][1]:getCategory() 
-		if check == "Clothing" then
-			local container = items[1]['items'][1]:getContainer() or nil
-			context:addOption(getText("ContextMenu_Dress"), player, LETSGETNAKED.Dress, container)
-		end
-	end
+
+	local dressOption = context:addOption(getText("ContextMenu_Dress"), player, nil)
+	local subMenu = ISContextMenu:getNew(context)
+	context:addSubMenu(dressOption, subMenu)
+
+	addInventoryDress(player, subMenu, items[1]['items'][1])
 end
 
 LETSGETNAKED.BuildMenuUndressToContainer = function(player, context, worldobjects)
@@ -134,10 +150,8 @@ end
 local function func_Init()
 	Events.OnFillInventoryObjectContextMenu.Add(LETSGETNAKED.BuildMenuUndress)
 	Events.OnFillInventoryObjectContextMenu.Add(LETSGETNAKED.BuildMenuDress)
-	Events.OnFillWorldObjectContextMenu.Add(LETSGETNAKED.BuildMenuUndressToContainer)
-	Events.OnFillWorldObjectContextMenu.Add(LETSGETNAKED.BuildMenuDressFromContainer)
-	Events.OnFillWorldObjectContextMenu.Add(LETSGETNAKED.BuildMenuUndressToFloor)
-	Events.OnFillWorldObjectContextMenu.Add(LETSGETNAKED.BuildMenuDressFromFloor)
+	Events.OnFillWorldObjectContextMenu.Add(LETSGETNAKED.BuildMenuUndress)
+	Events.OnFillWorldObjectContextMenu.Add(LETSGETNAKED.BuildMenuDress)
 end
 
 Events.OnGameStart.Add(func_Init)
