@@ -2,16 +2,16 @@ LETSGETNAKED = {}
 
 -- Context Menu functions
 
-local addInventoryUndress = function(player, context, inventoryContainer)
+local addInventoryUndress = function(player, context, text, inventoryContainer)
 	if inventoryContainer ~= nil then
-		context:addOption(getText("ContextMenu_Inventory"), player, LETSGETNAKED.Undress, nil)
+		context:addOption(text, player, LETSGETNAKED.Undress, nil)
 	end
 end
 
-local addInventoryDress = function(player, context, inventoryContainer)
+local addInventoryDress = function(player, context, text, inventoryContainer)
 	if inventoryContainer ~= nil then
 		local container = inventoryContainer:getContainer() or nil
-		context:addOption(getText("ContextMenu_Inventory"), player, LETSGETNAKED.Dress, container)
+		context:addOption(text, player, LETSGETNAKED.Dress, container)
 	end
 end
 
@@ -25,7 +25,7 @@ LETSGETNAKED.BuildMenuUndress = function(player, context, items)
 	local subMenu = ISContextMenu:getNew(context)
 	context:addSubMenu(undressOption, subMenu)
 
-	addInventoryUndress(player, subMenu, items[1]['items'])
+	addInventoryUndress(player, subMenu, getText("ContextMenu_Inventory"), items[1]['items'])
 end
 
 LETSGETNAKED.BuildMenuDress = function(player, context, items)	
@@ -35,7 +35,7 @@ LETSGETNAKED.BuildMenuDress = function(player, context, items)
 	local subMenu = ISContextMenu:getNew(context)
 	context:addSubMenu(dressOption, subMenu)
 
-	addInventoryDress(player, subMenu, items[1]['items'][1])
+	addInventoryDress(player, subMenu, getText("ContextMenu_Inventory"), items[1]['items'][1])
 end
 
 LETSGETNAKED.BuildMenuUndressToContainer = function(player, context, worldobjects)
