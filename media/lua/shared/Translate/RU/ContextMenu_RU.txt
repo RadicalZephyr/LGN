@@ -1,0 +1,6 @@
+ContextMenu_RU = {
+	ContextMenu_UndressContainer = "Снять одежду в контейнер",
+	ContextMenu_Undress = "Снять всю одежду",
+	ContextMenu_Dress = "Надеть всю одежду",
+	ContextMenu_DressContainer = "Надеть одежду из контейнера",
+}

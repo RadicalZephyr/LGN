@@ -1,0 +1,6 @@
+ContextMenu_EN = {
+	ContextMenu_UndressContainer = "Undress to container",
+	ContextMenu_Undress = "Undress",
+	ContextMenu_Dress = "Dress",
+	ContextMenu_DressContainer = "Dress from container",
+}
