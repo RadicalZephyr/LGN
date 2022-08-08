@@ -92,6 +92,19 @@ LETSGETNAKED.Undress = function(player, container)
 end
 
 LETSGETNAKED.Dress = function(player, container)
+	local container_X = worldobjects[1]:getSquare():getX()
+	local container_Y = worldobjects[1]:getSquare():getY()
+	-- Walk to a container if it's too far away?? But how???
+	if math.abs(player:getX() - container_X) > 2 or math.abs(player:getY() - container_Y) > 2 then
+		-- From client/Context/World/ISContextDisassemble.lua
+		-- object.moveProps:walkToAndEquip(player, square, string?)
+		-- seems wrong for moving to a container, needs to
+
+		-- From client/Context/World/ISContextDoor.lua
+		-- luautils.walkAdjWindowOrDoor(player, square, door)
+		-- seems good, except that we want to walk adjacent to a container
+	end
+
 	local clothing = container:getItemsFromCategory('Clothing')
 	local player_inv = player:getInventory():getItemsFromCategory('Clothing')
 	local equipped_clothing = {}
