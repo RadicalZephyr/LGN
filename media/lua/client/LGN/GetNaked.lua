@@ -36,6 +36,7 @@ end
 
 LETSGETNAKED.BuildMenuDressFromContainer = function(player, context, worldobjects)
 	if worldobjects[1]:getContainer() ~= nil then
+		local selectedContainer = worldobjects[1]:getContainer() 
 		local player = getSpecificPlayer(player)
 		local container_X = worldobjects[1]:getSquare():getX()
 		local container_Y = worldobjects[1]:getSquare():getY()
@@ -46,28 +47,33 @@ LETSGETNAKED.BuildMenuDressFromContainer = function(player, context, worldobject
 	end
 end
 
-local function getFloorContainer(playerNum)
-	local player = getSpecificPlayer(playerNum)
+LETSGETNAKED.BuildMenuUndressToFloor = function(playerNum, context, worldobjects)
 	local loot = getPlayerLoot(playerNum)
-
-	for i, backpack in ipairs(loot.backpacks) do
-		if backpack.title == "Floor" then
-			return backpack.inventory
+	local backpacks = loot.backpacks
+	local floorContainer = nil
+	for i,b in ipairs(backpacks) do
+		local bp = backpacks[i]
+		local name = bp.name
+		if bp.name == "Floor" then
+			local player = getSpecificPlayer(playerNum)
+			local container = bp.inventory
+			context:addOption(getText("ContextMenu_UndressFloor"), player, LETSGETNAKED.Undress, container)
+			break
 		end
 	end
 end
 
-LETSGETNAKED.BuildMenuUndressToFloor = function(playerNum, context, worldobjects)
-	local floorContainer = getFloorContainer(playerNum)
-	if floorContainer ~= nil then
-		context:addOption(getText("ContextMenu_UndressFloor"), player, LETSGETNAKED.Undress, container)
-	end
-end
-
 LETSGETNAKED.BuildMenuDressFromFloor = function(playerNum, context, worldobjects)
-	local floorContainer = getFloorContainer(playerNum)
-	if floorContainer ~= nil then
-		context:addOption(getText("ContextMenu_DressFloor"), player, LETSGETNAKED.Dress, container)
+	local loot = getPlayerLoot(playerNum)
+	local backpacks = loot.backpacks
+	for i,b in ipairs(backpacks) do
+		local bp = backpacks[i]
+		local name = bp.name
+		if bp.name == "Floor" then
+			local player = getSpecificPlayer(playerNum)
+			local container = bp.inventory
+			context:addOption(getText("ContextMenu_DressFloor"), player, LETSGETNAKED.Dress, container)
+		end
 	end
 end
 
