@@ -28,7 +28,8 @@ LETSGETNAKED.BuildMenuUndressToContainer = function(player, context, worldobject
 		local container_X = worldobjects[1]:getSquare():getX()
 		local container_Y = worldobjects[1]:getSquare():getY()
 		if math.abs(player:getX() - container_X) < 2 and math.abs(player:getY() - container_Y) then
-			context:addOption(getText("ContextMenu_UndressContainer"), player, LETSGETNAKED.Undress, worldobjects[1]:getContainer())
+			local container = worldobjects[1]:getContainer()
+			context:addOption(getText("ContextMenu_UndressContainer"), player, LETSGETNAKED.Undress, container)
 		end
 	end
 end
