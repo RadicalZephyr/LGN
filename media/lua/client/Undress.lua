@@ -46,27 +46,28 @@ LETSGETNAKED.BuildMenuDressFromContainer = function(player, context, worldobject
 	end
 end
 
-LETSGETNAKED.BuildMenuUndressToFloor = function(player, context, worldobjects)
-	if worldobjects[1]:getContainer() ~= nil then
-		local player = getSpecificPlayer(player)
-		local container_X = worldobjects[1]:getSquare():getX()
-		local container_Y = worldobjects[1]:getSquare():getY()
-		if math.abs(player:getX() - container_X) < 2 and math.abs(player:getY() - container_Y) then
-			local container = worldobjects[1]:getContainer()
-			context:addOption(getText("ContextMenu_UndressFloor"), player, LETSGETNAKED.Undress, container)
+local function getFloorContainer(playerNum)
+	local player = getSpecificPlayer(playerNum)
+	local loot = getPlayerLoot(playerNum)
+
+	for i, backpack in ipairs(loot.backpacks) do
+		if backpack.title == "Floor" then
+			return backpack.inventory
 		end
 	end
 end
 
-LETSGETNAKED.BuildMenuDressFromFloor = function(player, context, worldobjects)
-	if worldobjects[1]:getContainer() ~= nil then
-		local player = getSpecificPlayer(player)
-		local container_X = worldobjects[1]:getSquare():getX()
-		local container_Y = worldobjects[1]:getSquare():getY()
-		if math.abs(player:getX() - container_X) < 2 and math.abs(player:getY() - container_Y) then
-			local container = worldobjects[1]:getContainer()
-			context:addOption(getText("ContextMenu_DressFloor"), player, LETSGETNAKED.Dress, container)
-		end
+LETSGETNAKED.BuildMenuUndressToFloor = function(playerNum, context, worldobjects)
+	local floorContainer = getFloorContainer(playerNum)
+	if floorContainer ~= nil then
+		context:addOption(getText("ContextMenu_UndressFloor"), player, LETSGETNAKED.Undress, container)
+	end
+end
+
+LETSGETNAKED.BuildMenuDressFromFloor = function(playerNum, context, worldobjects)
+	local floorContainer = getFloorContainer(playerNum)
+	if floorContainer ~= nil then
+		context:addOption(getText("ContextMenu_DressFloor"), player, LETSGETNAKED.Dress, container)
 	end
 end
 
