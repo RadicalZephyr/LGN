@@ -3,13 +3,14 @@ LETSGETNAKED = {}
 -- Context Menu functions
 
 local addInventoryUndress = function(player, context, text, inventoryContainer)
-	if inventoryContainer ~= nil then
-		context:addOption(text, player, LETSGETNAKED.Undress, nil)
+	if inventoryContainer ~= nil and inventoryContainer["getContainer"] then
+		local container = inventoryContainer:getContainer() or nil
+		context:addOption(text, player, LETSGETNAKED.Undress, container)
 	end
 end
 
 local addInventoryDress = function(player, context, text, inventoryContainer)
-	if inventoryContainer ~= nil then
+	if inventoryContainer ~= nil and inventoryContainer["getContainer"] then
 		local container = inventoryContainer:getContainer() or nil
 		context:addOption(text, player, LETSGETNAKED.Dress, container)
 	end
@@ -18,49 +19,26 @@ end
 
 -- Builder functions
 
-LETSGETNAKED.BuildMenuUndress = function(player, context, items)
-	local player = getSpecificPlayer(player)
+LETSGETNAKED.BuildMenuUndress = function(playerId, context, itemsOrWorldObjects)
+	local player = getSpecificPlayer(playerId)
 
 	local undressOption = context:addOption(getText("ContextMenu_Undress"), player, nil)
 	local subMenu = ISContextMenu:getNew(context)
 	context:addSubMenu(undressOption, subMenu)
 
-	addInventoryUndress(player, subMenu, getText("ContextMenu_Inventory"), items[1]['items'])
+	addInventoryUndress(player, subMenu, getText("ContextMenu_Inventory"), itemsOrWorldObjects[1]['items'] and itemsOrWorldObjects[1]['items'][1])
+	addInventoryUndress(player, subMenu, getText("ContextMenu_Container"), itemsOrWorldObjects[1])
 end
 
-LETSGETNAKED.BuildMenuDress = function(player, context, items)	
-	local player = getSpecificPlayer(player)
+LETSGETNAKED.BuildMenuDress = function(playerId, context, itemsOrWorldObjects)
+	local player = getSpecificPlayer(playerId)
 
 	local dressOption = context:addOption(getText("ContextMenu_Dress"), player, nil)
 	local subMenu = ISContextMenu:getNew(context)
 	context:addSubMenu(dressOption, subMenu)
 
-	addInventoryDress(player, subMenu, getText("ContextMenu_Inventory"), items[1]['items'][1])
-end
-
-LETSGETNAKED.BuildMenuUndressToContainer = function(player, context, worldobjects)
-	if worldobjects[1]:getContainer() ~= nil then
-		local player = getSpecificPlayer(player)
-		local container_X = worldobjects[1]:getSquare():getX()
-		local container_Y = worldobjects[1]:getSquare():getY()
-		if math.abs(player:getX() - container_X) < 2 and math.abs(player:getY() - container_Y) then
-			local container = worldobjects[1]:getContainer()
-			context:addOption(getText("ContextMenu_UndressContainer"), player, LETSGETNAKED.Undress, container)
-		end
-	end
-end
-
-LETSGETNAKED.BuildMenuDressFromContainer = function(player, context, worldobjects)
-	if worldobjects[1]:getContainer() ~= nil then
-		local selectedContainer = worldobjects[1]:getContainer() 
-		local player = getSpecificPlayer(player)
-		local container_X = worldobjects[1]:getSquare():getX()
-		local container_Y = worldobjects[1]:getSquare():getY()
-		if math.abs(player:getX() - container_X) < 2 and math.abs(player:getY() - container_Y) then
-			local container = worldobjects[1]:getContainer()
-			context:addOption(getText("ContextMenu_DressContainer"), player, LETSGETNAKED.Dress, container)
-		end
-	end
+	addInventoryDress(player, subMenu, getText("ContextMenu_Inventory"), itemsOrWorldObjects[1]['items'] and itemsOrWorldObjects[1]['items'][1])
+	addInventoryDress(player, subMenu, getText("ContextMenu_Container"), itemsOrWorldObjects[1])
 end
 
 LETSGETNAKED.BuildMenuUndressToFloor = function(playerNum, context, worldobjects)
