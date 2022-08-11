@@ -1,25 +1,25 @@
-LETSGETNAKED = {}
+LGN = {}
 
 -- Context Menu functions
 
 local addInventoryUndress = function(playerNum, context, text, inventoryContainer)
 	if inventoryContainer and inventoryContainer["getContainer"] then
 		local container = inventoryContainer:getContainer()
-		context:addOption(text, playerNum, LETSGETNAKED.Undress, container)
+		context:addOption(text, playerNum, LGN.Undress, container)
 	end
 end
 
 local addInventoryDress = function(playerNum, context, text, inventoryContainer)
 	if inventoryContainer and inventoryContainer["getContainer"] then
 		local container = inventoryContainer:getContainer()
-		context:addOption(text, playerNum, LETSGETNAKED.Dress, container)
+		context:addOption(text, playerNum, LGN.Dress, container)
 	end
 end
 
 
 -- Builder functions
 
-LETSGETNAKED.BuildMenuUndress = function(playerNum, context, itemsOrWorldObjects)
+LGN.BuildMenuUndress = function(playerNum, context, itemsOrWorldObjects)
 	local undressOption = context:addOption(getText("ContextMenu_Undress"), playerNum, nil)
 	local subMenu = ISContextMenu:getNew(context)
 	context:addSubMenu(undressOption, subMenu)
@@ -38,7 +38,7 @@ LETSGETNAKED.BuildMenuUndress = function(playerNum, context, itemsOrWorldObjects
 	end
 end
 
-LETSGETNAKED.BuildMenuDress = function(playerNum, context, itemsOrWorldObjects)
+LGN.BuildMenuDress = function(playerNum, context, itemsOrWorldObjects)
 	local dressOption = context:addOption(getText("ContextMenu_Dress"), playerNum, nil)
 	local subMenu = ISContextMenu:getNew(context)
 	context:addSubMenu(dressOption, subMenu)
@@ -58,7 +58,7 @@ LETSGETNAKED.BuildMenuDress = function(playerNum, context, itemsOrWorldObjects)
 end
 
 -- Action functions
-LETSGETNAKED.Undress = function(playerNum, container)
+LGN.Undress = function(playerNum, container)
 	local player = getSpecificPlayer(playerNum)
 	-- If the container is a player inventory we don't need to check distance
 	if container and container:getParent() ~= player then
@@ -82,7 +82,7 @@ LETSGETNAKED.Undress = function(playerNum, container)
 	end
 end
 
-LETSGETNAKED.Dress = function(playerNum, container)
+LGN.Dress = function(playerNum, container)
 	local player = getSpecificPlayer(playerNum)
 	-- If the container is a player inventory we don't need to check distance
 	if container and container:getParent() ~= player then
@@ -116,16 +116,12 @@ LETSGETNAKED.Dress = function(playerNum, container)
 end
 
 
--- TODO: swap clothing with inventory
-LETSGETNAKED.SwapClothingWithContainer = function(player, items)
-end
-
 -- Init function
 local function func_Init()
-	Events.OnFillInventoryObjectContextMenu.Add(LETSGETNAKED.BuildMenuUndress)
-	Events.OnFillInventoryObjectContextMenu.Add(LETSGETNAKED.BuildMenuDress)
-	Events.OnFillWorldObjectContextMenu.Add(LETSGETNAKED.BuildMenuUndress)
-	Events.OnFillWorldObjectContextMenu.Add(LETSGETNAKED.BuildMenuDress)
+	Events.OnFillInventoryObjectContextMenu.Add(LGN.BuildMenuUndress)
+	Events.OnFillInventoryObjectContextMenu.Add(LGN.BuildMenuDress)
+	Events.OnFillWorldObjectContextMenu.Add(LGN.BuildMenuUndress)
+	Events.OnFillWorldObjectContextMenu.Add(LGN.BuildMenuDress)
 end
 
 Events.OnGameStart.Add(func_Init)
