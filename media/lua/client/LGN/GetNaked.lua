@@ -3,15 +3,15 @@ LETSGETNAKED = {}
 -- Context Menu functions
 
 local addInventoryUndress = function(playerNum, context, text, inventoryContainer)
-	if inventoryContainer ~= nil and inventoryContainer["getContainer"] then
-		local container = inventoryContainer:getContainer() or nil
+	if inventoryContainer and inventoryContainer["getContainer"] then
+		local container = inventoryContainer:getContainer()
 		context:addOption(text, playerNum, LETSGETNAKED.Undress, container)
 	end
 end
 
 local addInventoryDress = function(playerNum, context, text, inventoryContainer)
-	if inventoryContainer ~= nil and inventoryContainer["getContainer"] then
-		local container = inventoryContainer:getContainer() or nil
+	if inventoryContainer and inventoryContainer["getContainer"] then
+		local container = inventoryContainer:getContainer()
 		context:addOption(text, playerNum, LETSGETNAKED.Dress, container)
 	end
 end
@@ -26,6 +26,16 @@ LETSGETNAKED.BuildMenuUndress = function(playerNum, context, itemsOrWorldObjects
 
 	addInventoryUndress(playerNum, subMenu, getText("ContextMenu_Inventory"), itemsOrWorldObjects[1]['items'] and itemsOrWorldObjects[1]['items'][1])
 	addInventoryUndress(playerNum, subMenu, getText("ContextMenu_Container"), itemsOrWorldObjects[1])
+	local loot = getPlayerLoot(playerNum)
+	local backpacks = loot.backpacks
+	for i,_b in ipairs(backpacks) do
+		local b = backpacks[i]
+		if b.name == "Floor" then
+			b['getContainer'] = function () return b.inventory end
+			addInventoryUndress(playerNum, subMenu, getText("ContextMenu_Floor"), b)
+			break
+		end
+	end
 end
 
 LETSGETNAKED.BuildMenuDress = function(playerNum, context, itemsOrWorldObjects)
@@ -35,32 +45,14 @@ LETSGETNAKED.BuildMenuDress = function(playerNum, context, itemsOrWorldObjects)
 
 	addInventoryDress(playerNum, subMenu, getText("ContextMenu_Inventory"), itemsOrWorldObjects[1]['items'] and itemsOrWorldObjects[1]['items'][1])
 	addInventoryDress(playerNum, subMenu, getText("ContextMenu_Container"), itemsOrWorldObjects[1])
-end
-
-LETSGETNAKED.BuildMenuUndressToFloor = function(playerNum, context, worldobjects)
 	local loot = getPlayerLoot(playerNum)
 	local backpacks = loot.backpacks
-	local floorContainer = nil
-	for i,b in ipairs(backpacks) do
-		local bp = backpacks[i]
-		local name = bp.name
-		if bp.name == "Floor" then
-			local container = bp.inventory
-			context:addOption(getText("ContextMenu_UndressFloor"), playerNum, LETSGETNAKED.Undress, container)
+	for i,_b in ipairs(backpacks) do
+		local b = backpacks[i]
+		if b.name == "Floor" then
+			b['getContainer'] = function () return b.inventory end
+			addInventoryDress(playerNum, subMenu, getText("ContextMenu_Floor"), b)
 			break
-		end
-	end
-end
-
-LETSGETNAKED.BuildMenuDressFromFloor = function(playerNum, context, worldobjects)
-	local loot = getPlayerLoot(playerNum)
-	local backpacks = loot.backpacks
-	for i,b in ipairs(backpacks) do
-		local bp = backpacks[i]
-		local name = bp.name
-		if bp.name == "Floor" then
-			local container = bp.inventory
-			context:addOption(getText("ContextMenu_DressFloor"), playerNum, LETSGETNAKED.Dress, container)
 		end
 	end
 end
