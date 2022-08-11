@@ -1,3 +1,24 @@
-# undress-plus-floor
+# Let's Get Naked!
 
- Project Zomboid Easy Undressing mod + dress/undress from the floor
+Easily get dressed or undressed to several convenient storage locations.
+
+Adds submenus to the right-click context menu to dress from or undress into the:
+ - player inventory (by right clicking in the inventory panel)
+ - a selected container
+ - the floor at the player's feet
+
+If the container is out of reach of the player, the character will walk to it.
+
+Never removes your belt. Never removes an already worn item of clothing when dressing. Favorited items will be unequipped but remain in your inventory.
+
+
+### Current Limitations
+
+ - Undressing to the floor always happens at the player's feet.
+ - Undressing to inventory only works when right clicking in the inventory panel
+ - Cannot undress to backpacks or other worn or carried containers
+
+
+# Credit
+
+Inspired by and code initially based on [Easy Undressing](https://steamcommunity.com/sharedfiles/filedetails/?id=2275103198) by MCF.
