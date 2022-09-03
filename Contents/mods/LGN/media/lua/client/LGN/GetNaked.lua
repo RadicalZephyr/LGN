@@ -1,4 +1,4 @@
-LGN = {}
+local LGN = {}
 
 -- Context Menu functions
 
@@ -125,3 +125,5 @@ local function func_Init()
 end
 
 Events.OnGameStart.Add(func_Init)
+
+return LGN
