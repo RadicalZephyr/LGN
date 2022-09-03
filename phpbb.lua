@@ -295,7 +295,7 @@ function DoubleQuoted(lst)
 end
 
 function SoftBreak()
-  return ''
+  return ' '
 end
 
 -- boilerplate
