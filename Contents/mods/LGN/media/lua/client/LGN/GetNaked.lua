@@ -5,53 +5,61 @@ local LGN = {}
 local addInventoryUndress = function(playerNum, context, text, inventoryContainer)
    if inventoryContainer and inventoryContainer["getContainer"] then
       local container = inventoryContainer:getContainer()
-      context:addOption(text, playerNum, LGN.Undress, container)
+      local name = getText("ContextMenu_LGN_Undress") .. text;
+      context:addOption(name, playerNum, LGN.Undress, container)
    end
 end
 
 local addInventoryDress = function(playerNum, context, text, inventoryContainer)
    if inventoryContainer and inventoryContainer["getContainer"] then
       local container = inventoryContainer:getContainer()
-      context:addOption(text, playerNum, LGN.Dress, container)
+      local name = getText("ContextMenu_LGN_Dress") .. text;
+      context:addOption(name, playerNum, LGN.Dress, container)
    end
 end
 
 
 -- Builder functions
 
-LGN.BuildMenuUndress = function(playerNum, context, itemsOrWorldObjects)
-   local undressOption = context:addOption(getText("ContextMenu_Undress"), playerNum, nil)
+LGN.BuildInventoryMenu = function(playerNum, context, items)
+   local menuOption = context:addOptionOnTop(getText("ContextMenu_LGN_Menu"), playerNum, nil)
    local subMenu = ISContextMenu:getNew(context)
-   context:addSubMenu(undressOption, subMenu)
+   context:addSubMenu(menuOption, subMenu)
 
-   addInventoryUndress(playerNum, subMenu, getText("ContextMenu_Inventory"), itemsOrWorldObjects[1]['items'] and itemsOrWorldObjects[1]['items'][1])
-   addInventoryUndress(playerNum, subMenu, getText("ContextMenu_Container"), itemsOrWorldObjects[1])
+   addInventoryUndress(playerNum, subMenu, getText("ContextMenu_LGN_Inventory"), items[1]['items'] and items[1]['items'][1])
+
+   addInventoryDress(playerNum, subMenu, getText("ContextMenu_LGN_Inventory"), items[1]['items'] and items[1]['items'][1])
+
    local loot = getPlayerLoot(playerNum)
    local backpacks = loot.backpacks
    for i,_b in ipairs(backpacks) do
       local b = backpacks[i]
       if b.name == "Floor" then
          b['getContainer'] = function () return b.inventory end
-         addInventoryUndress(playerNum, subMenu, getText("ContextMenu_Floor"), b)
+         addInventoryUndress(playerNum, subMenu, getText("ContextMenu_LGN_Floor"), b)
+         addInventoryDress(playerNum, subMenu, getText("ContextMenu_LGN_Floor"), b)
          break
       end
    end
 end
 
-LGN.BuildMenuDress = function(playerNum, context, itemsOrWorldObjects)
-   local dressOption = context:addOption(getText("ContextMenu_Dress"), playerNum, nil)
+LGN.BuildWorldMenu = function(playerNum, context, worldObjects)
+   local undressOption = context:addOptionOnTop(getText("ContextMenu_LGN_Menu"), playerNum, nil)
    local subMenu = ISContextMenu:getNew(context)
-   context:addSubMenu(dressOption, subMenu)
+   context:addSubMenu(undressOption, subMenu)
 
-   addInventoryDress(playerNum, subMenu, getText("ContextMenu_Inventory"), itemsOrWorldObjects[1]['items'] and itemsOrWorldObjects[1]['items'][1])
-   addInventoryDress(playerNum, subMenu, getText("ContextMenu_Container"), itemsOrWorldObjects[1])
+   addInventoryUndress(playerNum, subMenu, getText("ContextMenu_LGN_Container"), worldObjects[1])
+
+   addInventoryDress(playerNum, subMenu, getText("ContextMenu_LGN_Container"), worldObjects[1])
+
    local loot = getPlayerLoot(playerNum)
    local backpacks = loot.backpacks
    for i,_b in ipairs(backpacks) do
       local b = backpacks[i]
       if b.name == "Floor" then
          b['getContainer'] = function () return b.inventory end
-         addInventoryDress(playerNum, subMenu, getText("ContextMenu_Floor"), b)
+         addInventoryUndress(playerNum, subMenu, getText("ContextMenu_LGN_Floor"), b)
+         addInventoryDress(playerNum, subMenu, getText("ContextMenu_LGN_Floor"), b)
          break
       end
    end
@@ -118,10 +126,8 @@ end
 
 -- Init function
 local function func_Init()
-   Events.OnFillInventoryObjectContextMenu.Add(LGN.BuildMenuUndress)
-   Events.OnFillInventoryObjectContextMenu.Add(LGN.BuildMenuDress)
-   Events.OnFillWorldObjectContextMenu.Add(LGN.BuildMenuUndress)
-   Events.OnFillWorldObjectContextMenu.Add(LGN.BuildMenuDress)
+   Events.OnFillInventoryObjectContextMenu.Add(LGN.BuildInventoryMenu)
+   Events.OnFillWorldObjectContextMenu.Add(LGN.BuildWorldMenu)
 end
 
 Events.OnGameStart.Add(func_Init)
