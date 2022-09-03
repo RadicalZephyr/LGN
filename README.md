@@ -9,7 +9,10 @@ Adds submenus to the right-click context menu to dress from or undress into the:
 
 If the container is out of reach of the player, the character will walk to it.
 
-Never removes your belt. Never removes an already worn item of clothing when dressing. Favorited items will be unequipped but remain in your inventory.
+Never removes your belt. Never removes an already worn item of
+clothing when dressing. Favorited clothing items will be unequipped
+but _will remain in your inventory_. If you think your clothing has disappeared,
+**CHECK YOUR INVENTORY**.
 
 
 ### Current Limitations
