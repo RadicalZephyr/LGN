@@ -1,5 +1,3 @@
-local LGN = {}
-
 -- Context Menu functions
 
 local addInventoryUndress = function(playerNum, context, text, inventoryContainer)
@@ -18,51 +16,76 @@ local addInventoryDress = function(playerNum, context, text, inventoryContainer)
    end
 end
 
+ISInventoryMenuElements = ISInventoryMenuElements or {};
 
--- Builder functions
+function ISInventoryMenuElements.UnDressMenu()
+   local self = ISMenuElement.new();
 
-LGN.BuildInventoryMenu = function(playerNum, context, items)
-   local menuOption = context:addOptionOnTop(getText("ContextMenu_LGN_Menu"), playerNum, nil)
-   local subMenu = ISContextMenu:getNew(context)
-   context:addSubMenu(menuOption, subMenu)
+   function self.init()
+   end
 
-   addInventoryUndress(playerNum, subMenu, getText("ContextMenu_LGN_Inventory"), items[1]['items'] and items[1]['items'][1])
+   function self.createMenu(data)
+      local playerNum = data.player;
+      local dressMenu = data.context:addOptionOnTop(getText("ContextMenu_LGN_Menu"), playerNum, nil)
+      local subMenu = ISContextMenu:getNew(context)
+      context:addSubMenu(menuOption, subMenu)
 
-   addInventoryDress(playerNum, subMenu, getText("ContextMenu_LGN_Inventory"), items[1]['items'] and items[1]['items'][1])
+      local items = data.objects;
+      addInventoryUndress(playerNum, subMenu, getText("ContextMenu_LGN_Inventory"), items[1]['items'] and items[1]['items'][1])
+      addInventoryDress(playerNum, subMenu, getText("ContextMenu_LGN_Inventory"), items[1]['items'] and items[1]['items'][1])
 
-   local loot = getPlayerLoot(playerNum)
-   local backpacks = loot.backpacks
-   for i,_b in ipairs(backpacks) do
-      local b = backpacks[i]
-      if b.name == "Floor" then
-         b['getContainer'] = function () return b.inventory end
-         addInventoryUndress(playerNum, subMenu, getText("ContextMenu_LGN_Floor"), b)
-         addInventoryDress(playerNum, subMenu, getText("ContextMenu_LGN_Floor"), b)
-         break
+      local loot = getPlayerLoot(playerNum)
+      local backpacks = loot.backpacks
+      for i,_b in ipairs(backpacks) do
+         local b = backpacks[i]
+         if b.name == "Floor" then
+            b['getContainer'] = function () return b.inventory end
+            addInventoryUndress(playerNum, subMenu, getText("ContextMenu_LGN_Floor"), b)
+            addInventoryDress(playerNum, subMenu, getText("ContextMenu_LGN_Floor"), b)
+            break
+         end
       end
    end
+
+   return self;
 end
 
-LGN.BuildWorldMenu = function(playerNum, context, worldObjects)
-   local undressOption = context:addOptionOnTop(getText("ContextMenu_LGN_Menu"), playerNum, nil)
-   local subMenu = ISContextMenu:getNew(context)
-   context:addSubMenu(undressOption, subMenu)
+ISWorldMenuElements = ISWorldMenuElements or {};
 
-   addInventoryUndress(playerNum, subMenu, getText("ContextMenu_LGN_Container"), worldObjects[1])
+function ISWorldMenuElements.UnDressMenu()
+   local self = ISMenuElement.new();
 
-   addInventoryDress(playerNum, subMenu, getText("ContextMenu_LGN_Container"), worldObjects[1])
+   function self.init()
+   end
 
-   local loot = getPlayerLoot(playerNum)
-   local backpacks = loot.backpacks
-   for i,_b in ipairs(backpacks) do
-      local b = backpacks[i]
-      if b.name == "Floor" then
-         b['getContainer'] = function () return b.inventory end
-         addInventoryUndress(playerNum, subMenu, getText("ContextMenu_LGN_Floor"), b)
-         addInventoryDress(playerNum, subMenu, getText("ContextMenu_LGN_Floor"), b)
-         break
+   function self.createMenu(data)
+      local playerNum = data.player;
+      local undressOption = data.context:addOptionOnTop(getText("ContextMenu_LGN_Menu"), playerNum, nil)
+      local subMenu = ISContextMenu:getNew(context)
+      context:addSubMenu(undressOption, subMenu)
+
+      for _,o in ipairs(data.objects) do
+         addInventoryUndress(playerNum, subMenu, getText("ContextMenu_LGN_Container") .. o:getName(), o)
+      end
+
+      for _,o in ipairs(data.objects) do
+         addInventoryDress(playerNum, subMenu, getText("ContextMenu_LGN_Container") .. o:getName(), o)
+      end
+
+      local loot = getPlayerLoot(playerNum)
+      local backpacks = loot.backpacks
+      for i,_b in ipairs(backpacks) do
+         local b = backpacks[i]
+         if b.name == "Floor" then
+            b['getContainer'] = function () return b.inventory end
+            addInventoryUndress(playerNum, subMenu, getText("ContextMenu_LGN_Floor"), b)
+            addInventoryDress(playerNum, subMenu, getText("ContextMenu_LGN_Floor"), b)
+            break
+         end
       end
    end
+
+   return self;
 end
 
 -- Action functions
