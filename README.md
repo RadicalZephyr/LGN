@@ -23,6 +23,11 @@ disappeared, **CHECK YOUR INVENTORY**.
  - Undressing to inventory only works when right clicking in the inventory panel
  - Cannot undress to backpacks or other worn or carried containers
 
+## License
+
+This is free and unencumbered software released into the public domain.
+
+See UNLICENSE file for more details.
 
 # Credit
 
